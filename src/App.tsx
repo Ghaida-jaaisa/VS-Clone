@@ -1,5 +1,5 @@
 import "./App.css";
-import fileTree from "./components/FileTree";
+import fileTree from "./data/fileTree";
 import RecursiveComponent from "./components/RecursiveComponent";
 
 function App() {
