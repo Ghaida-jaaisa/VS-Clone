@@ -3,15 +3,18 @@ import type { IFile } from "../interfaces";
 import RightArrowIcon from "./SVG/Right";
 import BottomArrowIcon from "./SVG/Bottom";
 import RenderFileIcon from "./RenderFileIcon";
-import FolderIcon from "./SVG/Folder";
+import { useDispatch, useSelector } from "react-redux";
+import {type RootState } from '../app/store';
 
 interface IProps {
   fileTree: IFile;
 }
 const RecursiveComponent = ({
-  fileTree: { name, isFolder, children, content },
+  fileTree: { name, isFolder, children },
 }: IProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const {} = useSelector((state: RootState) => state.tree)
 
   // ** Handlers
   const toggle = () => setIsOpen((prev) => !prev);
@@ -21,12 +24,20 @@ const RecursiveComponent = ({
         {isFolder ? (
           <div onClick={toggle} className="flex items-center">
             {isOpen ? <BottomArrowIcon /> : <RightArrowIcon />}
-            <FolderIcon />
+            <RenderFileIcon
+              filename={name}
+              isFolder={isFolder}
+              isOpen={isOpen}
+            />
             <span>{name}</span>
           </div>
         ) : (
-          <div className="flex items-center mr-2">
-            <RenderFileIcon filename={name} />
+          <div className="flex items-center ml-2" onClick={() => dispatch(setOpnedFiles([]))}>
+            <RenderFileIcon
+              filename={name}
+              isFolder={isFolder}
+              isOpen={isOpen}
+            />
             <span className="ml-2">{name}</span>
           </div>
         )}

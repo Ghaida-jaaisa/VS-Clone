@@ -1,13 +1,33 @@
+import { extensionIconPaths } from "../constant";
+import IconImg from "./IconImg";
+import FileIcon from "./SVG/File";
+
 interface IProps {
   filename: string;
+  isFolder?: boolean;
+  isOpen?: boolean;
 }
 
-const RenderFileIcon = ({ filename }: IProps) => {
+const RenderFileIcon = ({ filename, isFolder, isOpen }: IProps) => {
   const extension = filename.split(".").pop();
 
-  return <div>
-    <img src="/icons/react_ts.svg" alt="" />
-  </div>;
+  if (
+    extension &&
+    Object.prototype.hasOwnProperty.call(extensionIconPaths, extension)
+  ) {
+    const iconPath = isFolder
+      ? isOpen
+        ? `${extensionIconPaths[extension]}-open.svg`
+        : `${extensionIconPaths[extension]}.svg`
+      : `${extensionIconPaths[extension]}.svg`;
+
+    return <IconImg src={iconPath} />;
+  }
+
+  if (isFolder && isOpen ) return <IconImg  src="/icons/folder-default-open.svg" />
+  if (isFolder && !isOpen ) return <IconImg  src="/icons/folder-default.svg" />
+
+  return <FileIcon />;
 };
 
 export default RenderFileIcon;
