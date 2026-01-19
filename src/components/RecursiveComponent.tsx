@@ -4,20 +4,28 @@ import RightArrowIcon from "./SVG/Right";
 import BottomArrowIcon from "./SVG/Bottom";
 import RenderFileIcon from "./RenderFileIcon";
 import { useDispatch, useSelector } from "react-redux";
-import {type RootState } from '../app/store';
+import { type RootState } from "../app/store";
+import { setOpenedFiles } from "../app/features/fileTreeSlice";
+import { doesFileObjectExist } from "../utils/functions";
 
 interface IProps {
   fileTree: IFile;
 }
-const RecursiveComponent = ({
-  fileTree: { name, isFolder, children },
-}: IProps) => {
+const RecursiveComponent = ({ fileTree }: IProps) => {
+  const { id, name, isFolder, children } = fileTree;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dispatch = useDispatch();
-  const {} = useSelector((state: RootState) => state.tree)
+  const { openedFiles } = useSelector((state: RootState) => state.tree);
 
   // ** Handlers
   const toggle = () => setIsOpen((prev) => !prev);
+  const onFileClicked = () => {
+    const exist = doesFileObjectExist(openedFiles, id);
+    if (exist) {
+      return;
+    }
+    dispatch(setOpenedFiles([...openedFiles, fileTree]));
+  };
   return (
     <div className="mb-2 ml-2 cursor-pointer">
       <div className="flex items-center mb-1">
@@ -32,7 +40,7 @@ const RecursiveComponent = ({
             <span>{name}</span>
           </div>
         ) : (
-          <div className="flex items-center ml-2" onClick={() => dispatch(setOpnedFiles([]))}>
+          <div className="flex items-center ml-2" onClick={onFileClicked}>
             <RenderFileIcon
               filename={name}
               isFolder={isFolder}

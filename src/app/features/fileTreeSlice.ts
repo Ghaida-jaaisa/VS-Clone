@@ -30,5 +30,5 @@ export const fileTreeSlice = createSlice({
   },
 });
 
-export default fileTreeSlice.reducer;
 export const {setOpenedFiles} = fileTreeSlice.actions
+export default fileTreeSlice.reducer;
