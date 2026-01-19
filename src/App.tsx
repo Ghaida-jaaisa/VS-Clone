@@ -1,5 +1,5 @@
 import "./App.css";
-import fileTree from "./data/fileTree";
+import {fileTree} from "./data/fileTree";
 import RecursiveComponent from "./components/RecursiveComponent";
 import OpenedFilesBar from "./components/OpenedFilesBar";
 

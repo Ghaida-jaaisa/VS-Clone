@@ -1,42 +1,46 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { PayloadAction
+ } from "@reduxjs/toolkit";
+ import {createSlice} from "@reduxjs/toolkit";
 import type { IFile } from "../../interfaces";
 
 interface IClickedFile {
+  activeTabId: string | null;
   filename: string;
-  fileContent: string;
+  fileContent: string | undefined;
 }
 
-interface IInitialState{ 
-    openedFiles : IFile[];
-    clickedFile: IClickedFile;
-    activeTabId: string | null
+interface IInitialState {
+  openedFiles: IFile[];
+  clickedFile: IClickedFile;
+  tabIdToRemove: string | null;
 }
 
-
-const initialState : IInitialState = {
+const initialState: IInitialState = {
   openedFiles: [],
   clickedFile: {
+    activeTabId: null,
     filename: "",
     fileContent: "",
   },
-  activeTabId: null
+  tabIdToRemove: null,
 };
 
-export const fileTreeSlice = createSlice({
+const fileTreeSlice = createSlice({
   name: "fileTree",
   initialState,
   reducers: {
-    setOpenedFilesAction : (state, action: PayloadAction<IFile[]>) => {
-        state.openedFiles = action.payload
+    setOpenedFilesAction: (state, action: PayloadAction<IFile[]>) => {
+      state.openedFiles = action.payload;
     },
-    setClickedFileAction: (state, action: PayloadAction<IClickedFile>) => { 
-      state.clickedFile = action.payload
+    setClickedFileAction: (state, action: PayloadAction<IClickedFile>) => {
+      state.clickedFile = action.payload;
     },
-    setActiceTabIdAction : (state, action: PayloadAction<string>) => { 
-      state.activeTabId = action.payload
-    }
+    setTabIdToRemoveAction: (state, action: PayloadAction<string | null>) => {
+      state.tabIdToRemove = action.payload;
+    },
   },
 });
 
-export const {setOpenedFilesAction, setClickedFileAction, setActiceTabIdAction} = fileTreeSlice.actions
+export const { setClickedFileAction, setOpenedFilesAction , setTabIdToRemoveAction } = fileTreeSlice.actions;
+
 export default fileTreeSlice.reducer;

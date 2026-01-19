@@ -1,57 +1,57 @@
 import { useState } from "react";
 import type { IFile } from "../interfaces";
-import RightArrowIcon from "./SVG/Right";
-import BottomArrowIcon from "./SVG/Bottom";
 import RenderFileIcon from "./RenderFileIcon";
+import BottomArrowIcon from "./SVG/Bottom";
+import RightArrowIcon from "./SVG/Right";
 import { useDispatch, useSelector } from "react-redux";
-import { type RootState } from "../app/store";
 import {
-  setActiceTabIdAction,
+  setClickedFileAction,
   setOpenedFilesAction,
 } from "../app/features/fileTreeSlice";
+import type { RootState } from "../app/store";
 import { doesFileObjectExist } from "../utils/functions";
 
 interface IProps {
   fileTree: IFile;
 }
-const RecursiveComponent = ({ fileTree }: IProps) => {
-  const { id, name, isFolder, children } = fileTree;
-  const [isOpen, setIsOpen] = useState<boolean>(false);
 
+const RecursiveComponent = ({ fileTree }: IProps) => {
+  const { id, name, isFolder, children, content } = fileTree;
   const dispatch = useDispatch();
   const { openedFiles } = useSelector((state: RootState) => state.tree);
+  const [isOpen, setIsOpen] = useState<boolean>(true);
 
   // ** Handlers
   const toggle = () => setIsOpen((prev) => !prev);
   const onFileClicked = () => {
-    const exist = doesFileObjectExist(openedFiles, id);
-    if (exist) {
-      return;
-    }
+    const exists = doesFileObjectExist(openedFiles, id);
+    dispatch(
+      setClickedFileAction({
+        filename: name,
+        fileContent: content,
+        activeTabId: id,
+      }),
+    );
+    if (exists) return;
     dispatch(setOpenedFilesAction([...openedFiles, fileTree]));
-    dispatch(setActiceTabIdAction(fileTree.id));
   };
+
   return (
-    <div className="mb-2 ml-2 cursor-pointer">
+    <div className="w-full mb-1 ml-1 cursor-pointer">
       <div className="flex items-center mb-1">
         {isFolder ? (
           <div onClick={toggle} className="flex items-center">
-            {isOpen ? <BottomArrowIcon /> : <RightArrowIcon />}
-            <RenderFileIcon
-              filename={name}
-              isFolder={isFolder}
-              isOpen={isOpen}
-            />
-            <span>{name}</span>
+            <span className="mr-2">
+              {isOpen ? <BottomArrowIcon /> : <RightArrowIcon />}
+            </span>
+
+            <RenderFileIcon filename={name} isFolder isOpen={isOpen} />
+            <span className="ml-2 text-lg">{name}</span>
           </div>
         ) : (
-          <div className="flex items-center ml-2" onClick={onFileClicked}>
-            <RenderFileIcon
-              filename={name}
-              isFolder={isFolder}
-              isOpen={isOpen}
-            />
-            <span className="ml-2">{name}</span>
+          <div className="flex items-center ml-6" onClick={onFileClicked}>
+            <RenderFileIcon filename={name} />
+            <span className="ml-2 text-lg">{name}</span>
           </div>
         )}
       </div>
@@ -59,7 +59,7 @@ const RecursiveComponent = ({ fileTree }: IProps) => {
       {isOpen &&
         children &&
         children.map((file, idx) => (
-          <RecursiveComponent key={idx} fileTree={file} />
+          <RecursiveComponent fileTree={file} key={idx} />
         ))}
     </div>
   );
