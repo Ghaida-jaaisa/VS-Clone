@@ -5,7 +5,10 @@ import BottomArrowIcon from "./SVG/Bottom";
 import RenderFileIcon from "./RenderFileIcon";
 import { useDispatch, useSelector } from "react-redux";
 import { type RootState } from "../app/store";
-import { setOpenedFiles } from "../app/features/fileTreeSlice";
+import {
+  setActiceTabIdAction,
+  setOpenedFilesAction,
+} from "../app/features/fileTreeSlice";
 import { doesFileObjectExist } from "../utils/functions";
 
 interface IProps {
@@ -14,6 +17,7 @@ interface IProps {
 const RecursiveComponent = ({ fileTree }: IProps) => {
   const { id, name, isFolder, children } = fileTree;
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const dispatch = useDispatch();
   const { openedFiles } = useSelector((state: RootState) => state.tree);
 
@@ -24,7 +28,8 @@ const RecursiveComponent = ({ fileTree }: IProps) => {
     if (exist) {
       return;
     }
-    dispatch(setOpenedFiles([...openedFiles, fileTree]));
+    dispatch(setOpenedFilesAction([...openedFiles, fileTree]));
+    dispatch(setActiceTabIdAction(fileTree.id));
   };
   return (
     <div className="mb-2 ml-2 cursor-pointer">
