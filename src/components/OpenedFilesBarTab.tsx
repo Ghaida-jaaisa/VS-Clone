@@ -1,5 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setClickedFileAction, setOpenedFilesAction, setTabIdToRemoveAction } from "../app/features/fileTreeSlice";
+import {
+  setClickedFileAction,
+  setOpenedFilesAction,
+  setTabIdToRemoveAction,
+} from "../app/features/fileTreeSlice";
 import type { RootState } from "../app/store";
 import type { IFile } from "../interfaces";
 import RenderFileIcon from "./RenderFileIcon";
@@ -20,20 +24,38 @@ const OpenedFilesBarTab = ({ file }: IProps) => {
   // ** Handlers
   const onClick = () => {
     const { id, name, content } = file;
-    dispatch(setClickedFileAction({ filename: name, fileContent: content, activeTabId: id }));
+    dispatch(
+      setClickedFileAction({
+        filename: name,
+        fileContent: content,
+        activeTabId: id,
+      }),
+    );
   };
   const onRemove = (selectedId: string) => {
-    const filtered = openedFiles.filter(file => file.id !== selectedId);
+    const filtered = openedFiles.filter((file) => file.id !== selectedId);
     const lastTab = filtered[filtered.length - 1];
 
     if (!lastTab) {
       dispatch(setOpenedFilesAction([]));
-      dispatch(setClickedFileAction({ activeTabId: null, fileContent: "", filename: "" }));
+      dispatch(
+        setClickedFileAction({
+          activeTabId: null,
+          fileContent: "",
+          filename: "",
+        }),
+      );
       return;
     }
     const { id, name, content } = lastTab;
     dispatch(setOpenedFilesAction(filtered));
-    dispatch(setClickedFileAction({ activeTabId: id, fileContent: content, filename: name }));
+    dispatch(
+      setClickedFileAction({
+        activeTabId: id,
+        fileContent: content,
+        filename: name,
+      }),
+    );
   };
 
   return (
@@ -42,7 +64,7 @@ const OpenedFilesBarTab = ({ file }: IProps) => {
         file.id === activeTabId ? "border-[#cf6ccf]" : "border-transparent"
       }`}
       onClick={onClick}
-      onContextMenu={e => {
+      onContextMenu={(e) => {
         e.preventDefault();
         dispatch(setTabIdToRemoveAction(file.id));
       }}
@@ -53,7 +75,7 @@ const OpenedFilesBarTab = ({ file }: IProps) => {
       </span>
       <span
         className="cursor-pointer hover:bg-[#64646473] duration-300 flex justify-center items-center w-fit mr-2 p-1 rounded-md"
-        onClick={e => {
+        onClick={(e) => {
           e.stopPropagation();
           onRemove(file.id);
         }}
