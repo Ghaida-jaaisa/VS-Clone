@@ -1,5 +1,8 @@
 import { useRef, useEffect } from "react";
-import { setOpenedFilesAction } from "../../app/features/fileTreeSlice";
+import {
+  setClickedFileAction,
+  setOpenedFilesAction,
+} from "../../app/features/fileTreeSlice";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../app/store";
 
@@ -25,7 +28,28 @@ const ContextMenu = ({ positions: { x, y }, setShowMenu }: IProps) => {
   };
   const onClose = () => {
     const filtered = openedFiles.filter((file) => file.id !== tabIdToRemove);
+    const lastTab = filtered[filtered.length - 1];
+
+    if (!lastTab) {
+      dispatch(setOpenedFilesAction([]));
+      dispatch(
+        setClickedFileAction({
+          activeTabId: null,
+          fileContent: "",
+          filename: "",
+        }),
+      );
+      return;
+    }
+    const { id, name, content } = lastTab;
     dispatch(setOpenedFilesAction(filtered));
+    dispatch(
+      setClickedFileAction({
+        activeTabId: id,
+        fileContent: content,
+        filename: name,
+      }),
+    );
     setShowMenu(false);
   };
 
