@@ -1,6 +1,5 @@
-import type { PayloadAction
- } from "@reduxjs/toolkit";
- import {createSlice} from "@reduxjs/toolkit";
+import type { PayloadAction} from "@reduxjs/toolkit";
+ import  {createSlice } from "@reduxjs/toolkit"
 import type { IFile } from "../../interfaces";
 
 interface IClickedFile {
@@ -41,6 +40,6 @@ const fileTreeSlice = createSlice({
   },
 });
 
-export const { setClickedFileAction, setOpenedFilesAction , setTabIdToRemoveAction } = fileTreeSlice.actions;
+export const { setOpenedFilesAction, setClickedFileAction, setTabIdToRemoveAction } = fileTreeSlice.actions;
 
 export default fileTreeSlice.reducer;
