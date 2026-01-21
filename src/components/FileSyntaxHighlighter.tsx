@@ -1,4 +1,4 @@
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import SyntaxHighlighter from 'react-syntax-highlighter';
 import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 interface IProps {
