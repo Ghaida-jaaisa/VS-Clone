@@ -6,7 +6,6 @@ import Preview from "./components/Preview";
 import { useSelector } from "react-redux";
 import type { RootState } from "./app/store";
 import WelcomeTab from "./components/WelcomeTab";
-import DropMenu from "./components/ui/ContextMenu";
 
 function App() {
   const { openedFiles } = useSelector((state: RootState) => state.tree);
